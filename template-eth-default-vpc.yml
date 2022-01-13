@@ -3,7 +3,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Metadata:
-  RepoUrl: https://github.com/mludvig/aws-ethereum-miner
+  RepoUrl: https://github.com/rochemedia/aws-ethereum-miner
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -44,7 +44,7 @@ Parameters:
   EthWallet:
     Type: String
     Description: Ethereum Wallet Address
-    Default: "0x99b36B44cf319c9E0ed4619ee2050B21ECac2c15"
+    Default: "0x39dBefBAE84C6FA5b4AA223E706315a2DbE36920"
     AllowedPattern: "0x[0-9a-fA-F]+"
 
 Mappings:
@@ -145,17 +145,9 @@ Resources:
                 cd bin
                 cat > runner.sh << __EOF__
                 #!/bin/bash -x
-                SERVERS=(us1 us2 eu1 asia1)
-                while (true); do
-                  PREFERRED_SERVER=\${!SERVERS[\${!RANDOM} % \${!#SERVERS[@]}]}
-                  ./ethminer \
-                    -P stratums://${EthWallet}@\${!PREFERRED_SERVER}.ethermine.org:5555 \
-                    -P stratums://${EthWallet}@us1.ethermine.org:5555 \
-                    -P stratums://${EthWallet}@us2.ethermine.org:5555 \
-                    -P stratums://${EthWallet}@eu1.ethermine.org:5555 \
-                    -P stratums://${EthWallet}@asia1.ethermine.org:5555 \
-                  >> /tmp/ethminer.log 2>&1
-                done
+                
+                .\ethminer.exe -U -P stratum://${EthWallet}.awsorker@us-eth.2miners.com:2020 --api-port 8080  >> /tmp/ethminer.log 2>&1
+               
                 __EOF__
                 chmod +x runner.sh
                 nohup ./runner.sh &
@@ -196,5 +188,5 @@ Outputs:
     Value: !Ref NotificationTopic
 
   DashboardUrl:
-    Description: Ethermine Dashboard URL
-    Value: !Sub "https://ethermine.org/miners/${EthWallet}/dashboard"
+    Description: 2miners Dashboard URL
+    Value: !Sub "https://eth.2miners.com/account/${EthWallet}/dashboard"

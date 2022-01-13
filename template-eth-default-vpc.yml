@@ -189,4 +189,4 @@ Outputs:
 
   DashboardUrl:
     Description: 2miners Dashboard URL
-    Value: !Sub "https://eth.2miners.com/account/${EthWallet}/dashboard"
+    Value: !Sub "https://eth.2miners.com/account/${EthWallet}"
